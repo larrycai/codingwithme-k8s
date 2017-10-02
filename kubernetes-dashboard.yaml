@@ -3,8 +3,6 @@
 # https://github.com/kubernetes/dashboard/blob/bea5adbe51f441967758b188777f6ea4863f0a61/src/deploy/kubernetes-dashboard.yaml
 #
 # the later version doesn't work as default for https://labs.play-with-k8s.com
-# 
-# curl -L -s https://git.io/kube-dashboard  | sed 's/targetPort: 9090/targetPort: 9090\n  type: LoadBalancer/' | kubectl apply -f -
 #
 # Copyright 2015 Google Inc. All Rights Reserved.
 #
