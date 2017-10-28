@@ -21,6 +21,21 @@ If you happen to install the dashboard in wrong status, clean it up
     kubectl delete deploy/kubernetes-dashboard  --namespace=kube-system
     kubectl delete svc/kubernetes-dashboard  --namespace=kube-system
     
+# slides
+
+try to use markdown slides [remark](https://github.com/gnab/remark)
+
+## browse locally
+
+    docker run -d -v $PWD:/code --name web -w /code -p 8080:8000 python:2.7 python -m SimpleHTTPServer
+
+then http://localhost:8080/slides-remote.html
+
+## generate pdf
+
+     docker run --rm --net=host -v `pwd`:/slides \
+        astefanutti/decktape http://<host local ip>:8080/slides-remote.html slides.pdf
+
 # Errata
 
 
