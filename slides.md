@@ -104,9 +104,9 @@ Container is executed in Work Node as default
 ]
 
 ---
+# Exercise 1
 .left-column[
-## Exercise 1
-### - First web service
+## First web service
 ]
 .right-column[
 Let’s start one web server in k8s (cloud), Nginx is webserver like apache
@@ -192,9 +192,9 @@ kubectl expose deployment xxx –-type=NodePort
 - ...
 ]
 ---
+# Exercise 2
 .left-column[
-## Exercise 2
-### - revisit pod, deployment, service
+## revisit pod, deployment, service
 ]
 .right-column[
 Enter into container inside pod
@@ -220,9 +220,36 @@ kubectl delete deployment  xxx # check pod removed or not
 ```
 ]
 ---
+# Deployment more
 .left-column[
-## Exercise 3
-### - deployment with scale
+## Scale/Replicas
+]
+.right-column[
+Deployment describe the desired state in a Deployment object, and the Deployment controller will change the actual state to the desired state at a controlled rate for you
+
+Scale to wanted size (replicas)
+
+```bash
+$ kubectl scale --replicas=2 deployment/nginx
+$ kubectl scale --replicas=10 deployment/nginx
+deployment "nginx" scaled
+$ kubectl rollout status deployment/nginx
+Waiting for rollout to finish: 2 of 10 updated replicas are available...
+…
+Waiting for rollout to finish: 9 of 10 updated replicas are available...
+deployment "nginx" successfully rolled out
+$ kubectl get pods 
+```
+
+Patch, Upgrade, Rollback ..
+
+Autoscale : grow when needed
+
+]
+---
+# Exercise 3
+.left-column[
+## deployment with scale
 ]
 .right-column[
 Show hostname ( image: `larrycai/whoami` )
@@ -249,9 +276,98 @@ kubectl scale --replicas=2 deployment/whoami
 
 ]
 ---
-.left-column[
-## Reference
+# YAML descriptor
+.right-column[
+`kubectl` command line to deal with objects has limited set of properties
+- Difficult to maintain and version control
 
+YAML file is used to manage the object (local or web)
+```bash
+kubectl create -f node-pod.yaml
+kubectl create –f http://example.com/nginx-pod.yaml
+```
+Get full descriptions of the object in YAML 
+```bash
+kubectl get pods nginx2 -o yaml
+```
+]
+---
+# Exercise 4
+.left-column[
+## YAML file
+]
+.right-column[
+Create whoami deploy yaml file (use pod as reference)
+
+```bash
+kubectl get deploy whoami -o yaml
+```
+Download and create https://github.com/larrycai/codingwithme-k8s/blob/master/whoami.yaml 
+```bash
+curl -L -o whoami.yaml https://git.io/v7yd8
+kubectl delete service whoami
+kubectl delete deploy whoami
+kubectl create -f whoami.yaml
+```
+Change the `ReplicaSet` to 5 and run it again 
+```bash
+kubectl apply -f whoami.yaml
+```
+]
+---
+# Microservice in kubernetes
+.left-column[
+## Example
+### - Guestbook service
+]
+.right-column[
+Kubernetes is a great tool for microservices clustering and orchestration. 
+- It is still a quite new and under active development
+
+Kubernetes provides lots of features to be used to deploy microservices
+- Declare in YAML to deploy them
+
+Kubernetes official tutorial Guestbook 
+- https://kubernetes.io/docs/tutorials/stateless-application/guestbook/ 
+
+]
+---
+# Exercise 5
+.left-column[
+## Guestbook service
+]
+.right-column[
+Let's try to deploy all in one 
+
+```bash
+kubectl create -f https://git.io/v7ytR # shorturl to guestbook-all-in-one.yaml
+```
+- Check dashboards 
+
+Expose service to NodePort
+```bash
+kubectl expose svc frontend --name f2 --type=NodePort
+```
+- Check the guestbook service
+]
+---
+# Summary
+## Kubernetes: a **platform** to run container (docker)
+
+## Concept:
+- A **Node** is a worker machine in Kubernetes
+
+- A **Pod** is the basic building block of Kubernetes, which has a group of containers
+
+- **Deployment** controls the state of the pod (scale, replicate)
+
+- **Service** is an abstraction which defines a logical set of Pods and a policy by which to access them. (micro service ..)
+
+## Kubernetes grows very fast, follow it.
+
+---
+# Reference
+.left-column[
 <img src="https://images.manning.com/720/960/resize/book/d/e052c08-1751-4a4b-b95e-f1de5a715aa8/Luksa-Kubernetes-MEAP-HI.png" width="200"></img>
 ]
 .right-column[
@@ -265,6 +381,7 @@ kubectl scale --replicas=2 deployment/whoami
 * Book: [Kubernetes in Action (Manning)](https://www.manning.com/books/kubernetes-in-action)
 
 ]
+
 ---
 name: last-page
 template: inverse

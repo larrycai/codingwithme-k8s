@@ -2,7 +2,8 @@
 
 some codes in CodingWithMe : Kubernetes
 
-slides: https://www.slideshare.net/larrycai/learn-kubernetes-in-90-minutes (it cannot be updated since 2017.10 due to slideshare)
+* slides online: http://www.larrycaiyu.com/codingwithme-k8s/slides.html
+* slides@slideshare: https://www.slideshare.net/larrycai/learn-kubernetes-in-90-minutes (it cannot be updated since 2017.10 due to silly slideshare)
 
 # preparation in playground
 
@@ -29,12 +30,10 @@ try to use markdown slides [remark](https://github.com/gnab/remark)
 
     docker run -d -v $PWD:/code --name web -w /code -p 8080:8000 python:2.7 python -m SimpleHTTPServer
 
-then http://localhost:8080/slides-remote.html
-
 ## generate pdf
 
      docker run --rm --net=host -v `pwd`:/slides \
-        astefanutti/decktape http://<host local ip>:8080/slides-remote.html slides.pdf
+        astefanutti/decktape http://www.larrycaiyu.com/codingwithme-k8s/slides.html slides.pdf
 
 # Errata
 
