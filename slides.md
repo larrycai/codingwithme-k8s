@@ -54,7 +54,6 @@ kubeadm join –token … # check the console log in Node 1
 kubectl get nodes
 ```
 
-*_Note_*
 > Node 1/Step3 dashboard may have problem, check [codingwithme-k8s](https://github.com/larrycai/codingwithme-k8s)
 
 .footnote[.red[*] Use `Ctrl+Ins` and `Shift+Ins` for copy/paste the command in the console]
