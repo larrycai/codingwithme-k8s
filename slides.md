@@ -8,12 +8,12 @@ class: center, middle, inverse
 
 ---
 layout: false
+# Agenda
 .left-column[
-## Agenda
 ![](https://kubernetes.io/images/nav_logo2.svg)
 ]
 .right-column[
-- Introduction
+### Exercised based training to understand basic concepts of **kubernetes**
 
 - Exercise 1: First web service in kubernetes
 
@@ -25,49 +25,67 @@ layout: false
 
 - Exercise 5: install Microservice: Guestbook 
 
-- Reference 
-
-.footnote[.red[*] Minikube environment setup is in appendix]
+- Summary & Reference 
 ]
+???
+Minikube environment setup is in included, see 
+
 ---
+# Environment
 .left-column[
-## Environment
+## k8s-playground
+![](image/k8s-playground.png)
+### training env
+![](image/k8s-arch1.png)
 ]
 .right-column[
-Four nodes in http://labs.play-with-k8s.com (master + 3 workers)
+Use Google's http://labs.play-with-k8s.com
 
-- Node 1 as master node: follow instruction step 1/2/3
-##### .right[Step3 may have problem, check [codingwithme-k8s](https://github.com/larrycai/codingwithme-k8s)]
-- Node 2,3,4 as worker node
-
-`kubeadm join –token … # check the console log in Node 1`
-
+New 4 instance as four nodes in  (master + 3 workers)
+* Node 1 as master node: 
+ * follow instruction step 1/2/3
+* Node 2,3,4 as worker node
+```bash
+kubeadm join –token … # check the console log in Node 1
+```
 - Click the port to open dashboard
 - Check inside master node (Node 1)
+```bash
+kubectl get nodes
+```
 
-`kubectl get nodes`
+*_Note_*
+> Node 1/Step3 dashboard may have problem, check [codingwithme-k8s](https://github.com/larrycai/codingwithme-k8s)
 
-.footnote[.red[*] Use `Ctrl+Ins` and `Shift+Ins` for copy/paste the command]
+.footnote[.red[*] Use `Ctrl+Ins` and `Shift+Ins` for copy/paste the command in the console]
 ]
 ---
+# Container
 .left-column[
-## Container
+## vs VirtualMachine
+.footnote[.red[*] Learn more in <br/>&nbsp;&nbsp;&nbsp;[CodingWithMe Docker]( https://www.slideshare.net/larrycai/learn-docker-in-90-minutes)
+]
 ]
 .right-column[
 Container technology offers an alternative method for virtualization in cloud, with more efficiency & fast
 - New era for packaging and delivering software
 - Docker is one execution engine for container
 
-<img src="http://blog.jayway.com/wp-content/uploads/2015/03/vm-vs-docker.png" width="600" </img>
+![](image/container-vm-1.png) ![](image/container-vm-2.png)
 
+.pull-left[
 ```bash
 docker pull nginx
-docker run --name web -d -p 8080:80 nginx 
+docker run -d -p 8080:80 nginx 
+```
+]
+.pull-right[
+```bash
 docker build -t larrycai/whoami .
 docker push larrycai/whoami
 ```
-.footnote[.red[*] Learn more in [CodingWithMe Docker]( https://www.slideshare.net/larrycai/learn-docker-in-90-minutes)
 ]
+
 ]
 ---
 # Kubernetes
@@ -95,18 +113,22 @@ Key features (list partly):
 ## Architecture
 ]
 .right-column[
-Master and Work Node (multi or single)
+Kubernete cluster includes Master (control) and Worker (computer) Nodes (multi or single)
 
-Container is executed in Work Node as default
+Container is executed in Worker Node as default
 
-<img src="https://storage.googleapis.com/cdn.thenewstack.io/media/2016/11/Chart_02_Kubernetes-Architecture.png" width="560" />
+![](image/k8s-arch.png)
 
+kubernetes service is provided via **REST API** and its plugins
+- like Dashboard is plugin using kubernetes REST API
+- `kubectl` command communicates with REST API
 ]
 
 ---
 # Exercise 1
 .left-column[
 ## First web service
+![](image/exer1.png)
 ]
 .right-column[
 Let’s start one web server in k8s (cloud), Nginx is webserver like apache
@@ -130,17 +152,29 @@ docker ps # in different node
 kubectl delete pods nginx-<xxx>
 ```
 ]
+
+---
+# Kubernetes
+.right-column[
+![](image/service-overall.png)
+
+.footnote[.red[*] Image source https://kubernetes.io/images/hellonode/image_13.png 
+]
+]
 ---
 # Kubernetes
 .left-column[
 ## Pod
+![](image/overall-pod.png)
 ]
 .right-column[
 A .red[**pod**] is a group of one or more containers (such as Docker containers), the shared storage for those containers
 
 Minimal element in kubernetes, run in one Node
 
-Command 
+![](image/pod.png)
+
+`kubectl` `pod` related command 
 ```bash
 kubectl run pods
 kubectl get pods
@@ -154,6 +188,7 @@ kubectl exec -it <pod> -- bash
 .left-column[
 ## Pod
 ## Deployment
+![](image/overall-deployment.png)
 ]
 .right-column[
 The .red[**Deployment**] is responsible for creating and updating instances of your application (using controller)
@@ -177,13 +212,14 @@ kubectl run nginx --image=nginx --port=80 --replicas=1
 ## Pod
 ## Deployment
 ## Service
+![](image/overall-service.png)
 ]
 .right-column[
 .red[**Service**] is an abstraction which defines a logical set of Pods and a policy by which to access them 
 - sometimes called a micro-service
 - Service could be selected by label (skipped here)
 
-.red[**ServiceTypes**] defines how to expose a Service, The default is `ClusterIP` (internal)
+.red[**Service type**] defines how to expose a Service, The default is `ClusterIP` (internal)
 - NodePort : expose port in Kubernetes Master
 ```
 kubectl expose deployment xxx –-type=NodePort
@@ -201,12 +237,12 @@ Enter into container inside pod
 ```bash
 kubectl exec -it nginx-xxx -- bash
 ```
-Start pod only without deployment
+Start pod only without deployment (.red[`--restart=Never`])
 ```bash
 kubectl run nginx --image=nginx --port=80 --restart=Never
 kubectl run -i --tty ubuntu --image=ubuntu --restart=Never -- sh
 ```
-Expose to another service
+Expose existing service to another service with (.red[`--type=NodePort`])
 ```bash
 kubectl expose --name nginx2 deploy nginx
 kubectl get service
@@ -225,9 +261,9 @@ kubectl delete deployment  xxx # check pod removed or not
 ## Scale/Replicas
 ]
 .right-column[
-Deployment describe the desired state in a Deployment object, and the Deployment controller will change the actual state to the desired state at a controlled rate for you
+Deployment describe the .red[desired state] in a Deployment object, and the Deployment controller will change the actual state to the desired state at a controlled rate for you
 
-Scale to wanted size (replicas)
+Scale to wanted size (.red[--replicas=xx])
 
 ```bash
 $ kubectl scale --replicas=2 deployment/nginx
@@ -241,10 +277,26 @@ deployment "nginx" successfully rolled out
 $ kubectl get pods 
 ```
 
-Patch, Upgrade, Rollback ..
+.red[Patch, Upgrade, Rollback] ..
 
 Autoscale : grow when needed
 
+]
+---
+# Kubernetes Deployment example
+.left-column[
+## Canary release
+### vs. Blue/Green
+]
+.right-column[
+Kubernetes support to define own deploy strategy. 
+- User takes care of the service and what it wants to expose
+- The k8s platform do the rest
+
+![](image/canary-release.png)
+
+.footnote[.red[*] source http://blog.kubernetes.io/2017/04/multi-stage-canary-deployments-with-kubernetes-in-the-cloud-onprem.html
+]
 ]
 ---
 # Exercise 3
@@ -252,20 +304,18 @@ Autoscale : grow when needed
 ## deployment with scale
 ]
 .right-column[
-Show hostname ( image: `larrycai/whoami` )
+Show hostname ( image: `larrycai/whoami`  [@docker hub](https://hub.docker.com/r/larrycai/whoami/))
 ```bash
 kubectl run whoami --image=larrycai/whoami --port=5000
 kubectl expose deploy whoami --type=NodePort
 ```
-- Check the hostname in webpage
+- Check the hostname in webpage (printout the hostname in the app)
+![](image/whoami.png)
 
-Delete
-```bash
-kubectl delete pods whoami-xxxx
-```
+Delete `kubectl delete pods whoami-xxxx`
 - Check the hostname in webpage (reload) 
 
-Scale
+Scale In/Scale Out
 ```bash
 kubectl scale --replicas=20 deployment/whoami
 kubectl rollout status deployment/whoami
@@ -278,17 +328,28 @@ kubectl scale --replicas=2 deployment/whoami
 ---
 # YAML descriptor
 .right-column[
-`kubectl` command line to deal with objects has limited set of properties
+`kubectl` command line is limited to set properties of the objects
 - Difficult to maintain and version control
 
-YAML file is used to manage the object (local or web)
+.red[YAML file] is used to manage the object (local or .red[web])
 ```bash
 kubectl create -f node-pod.yaml
 kubectl create –f http://example.com/nginx-pod.yaml
 ```
 Get full descriptions of the object in YAML 
 ```bash
-kubectl get pods nginx2 -o yaml
+$ kubectl get pods nginx2 -o yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: gluster-pod1
+spec:
+  containers:
+  - name: gluster-pod1
+    image: gcr.io/google_containers/nginx-slim:0.8
+    ports:
+    - name: web
+      containerPort: 80
 ```
 ]
 ---
@@ -322,23 +383,27 @@ kubectl apply -f whoami.yaml
 ]
 .right-column[
 Kubernetes is a great tool for microservices clustering and orchestration. 
-- It is still a quite new and under active development
 
 Kubernetes provides lots of features to be used to deploy microservices
 - Declare in YAML to deploy them
 
-Kubernetes official tutorial Guestbook 
-- https://kubernetes.io/docs/tutorials/stateless-application/guestbook/ 
+Kubernetes official [tutorial Guestbook](
+https://kubernetes.io/docs/tutorials/stateless-application/guestbook/)
 
+![](image/guestbook-kubernetes.png)
+.footnote[.red[*] image source 
+https://netmark.jp/wp-content/uploads/2014/12/guestbook-kubernetes.png
+]
 ]
 ---
 # Exercise 5
 .left-column[
 ## Guestbook service
+![](image/guestbook.png)
 ]
 .right-column[
 Let's try to deploy all in one 
-
+![](image/guestbook-kubernetes.png)
 ```bash
 kubectl create -f https://git.io/v7ytR # shorturl to guestbook-all-in-one.yaml
 ```
@@ -352,10 +417,10 @@ kubectl expose svc frontend --name f2 --type=NodePort
 ]
 ---
 # Summary
-## Kubernetes: a **platform** to run container (docker)
+## Kubernetes: a .red[**orchestration platform**] to run **container** (docker)
 
 ## Concept:
-- A **Node** is a worker machine in Kubernetes
+- A **Node** is a master/worker machine in Kubernetes
 
 - A **Pod** is the basic building block of Kubernetes, which has a group of containers
 
@@ -368,7 +433,7 @@ kubectl expose svc frontend --name f2 --type=NodePort
 ---
 # Reference
 .left-column[
-<img src="https://images.manning.com/720/960/resize/book/d/e052c08-1751-4a4b-b95e-f1de5a715aa8/Luksa-Kubernetes-MEAP-HI.png" width="200"></img>
+![](image/book-kubernetes-in-action.png)
 ]
 .right-column[
 * K8s doc: https://kubernetes.io/docs/home/
@@ -379,8 +444,16 @@ kubectl expose svc frontend --name f2 --type=NodePort
 * Video: [The Illustrated Children's Guide to Kubernetes](https://www.youtube.com/watch?v=4ht22ReBjno)
 * Sandbox online: http://labs.play-with-k8s.com/ 
 * Book: [Kubernetes in Action (Manning)](https://www.manning.com/books/kubernetes-in-action)
-
 ]
+
+---
+# Changelog
+* 2017/07/23: first version 
+* 2017/08/11: use k8s playground
+* 2017/10/2: fix dashboard url
+* 2017/10/16: minor changes in Ex2
+* 2017/10/26: link to README.md 
+* 2017/10/29: change to markdown based
 
 ---
 name: last-page
@@ -388,5 +461,7 @@ template: inverse
 
 ## That's all folks (for now)!
 
-Slideshow created using [remark](http://github.com/gnab/remark).
+created using [remark](http://github.com/gnab/remark).
+
+.footnote[fork me @ [github](https://github.com/larrycai/codingwithme-k8s)]
 
