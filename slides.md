@@ -417,9 +417,10 @@ kubectl expose svc frontend --name f2 --type=NodePort
 ]
 ---
 # Summary
+.right-column[
 ## Kubernetes: a .red[**orchestration platform**] to run **container** (docker)
 
-## Concept:
+## Concept covered here:
 - A **Node** is a master/worker machine in Kubernetes
 
 - A **Pod** is the basic building block of Kubernetes, which has a group of containers
@@ -429,7 +430,7 @@ kubectl expose svc frontend --name f2 --type=NodePort
 - **Service** is an abstraction which defines a logical set of Pods and a policy by which to access them. (micro service ..)
 
 ## Kubernetes grows very fast, follow it.
-
+]
 ---
 # Reference
 .left-column[
@@ -448,13 +449,14 @@ kubectl expose svc frontend --name f2 --type=NodePort
 
 ---
 # Changelog
+.right-column[
 * 2017/07/23: first version 
 * 2017/08/11: use k8s playground
 * 2017/10/2: fix dashboard url
 * 2017/10/16: minor changes in Ex2
 * 2017/10/26: link to README.md 
 * 2017/10/29: change to markdown based
-
+]
 ---
 name: last-page
 template: inverse
