@@ -1,13 +1,15 @@
 name: inverse
 layout: true
-class: center, middle, inverse
+class: center, middle, inverse, hidefooter
 ---
 # Learn Kubernetes in 90 minutes
 [codingwithme]
 .footnote[author: [larry.cai](mailto:larry.caiyu@gmail.com), slides: [remark](https://github.com/gnab/remark)]
 
 ---
-layout: false
+layout: true
+class: footer-version
+---
 # Agenda
 .left-column[
 ![](https://kubernetes.io/images/nav_logo2.svg)
