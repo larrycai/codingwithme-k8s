@@ -45,7 +45,7 @@ Use Google's http://labs.play-with-k8s.com
 
 New 4 instance as four nodes in  (master + 3 workers)
 * Node 1 as master node: 
- * follow instruction step 1/2/3
+ * follow instruction step 1/2
 * Node 2,3,4 as worker node
 ```bash
 kubeadm join –token … # check the console log in Node 1
@@ -56,7 +56,7 @@ kubeadm join –token … # check the console log in Node 1
 kubectl get nodes
 ```
 
-> Node 1/Step3 dashboard may have problem, check [codingwithme-k8s](https://github.com/larrycai/codingwithme-k8s)
+> Node 1 needs to install dashboard, check Step3 in [codingwithme-k8s](https://github.com/larrycai/codingwithme-k8s)
 
 .footnote[.red[*] Use `Ctrl+Ins` and `Shift+Ins` for copy/paste the command in the console]
 ]
@@ -406,7 +406,7 @@ https://netmark.jp/wp-content/uploads/2014/12/guestbook-kubernetes.png
 Let's try to deploy all in one 
 ![](image/guestbook-kubernetes.png)
 ```bash
-kubectl create -f https://git.io/v7ytR # shorturl to guestbook-all-in-one.yaml
+kubectl create -f https://git.io/fbp5w # shorturl to guestbook-all-in-one.yaml
 ```
 - Check dashboards 
 
@@ -457,6 +457,7 @@ kubectl expose svc frontend --name f2 --type=NodePort
 * 2017/10/16: minor changes in Ex2
 * 2017/10/26: link to README.md 
 * 2017/10/29: change to markdown based
+* 2018/07/05: add dashboard & new guestbook link for new https://labs.play-with-k8s.com with 1.8.14
 ]
 ---
 name: last-page
