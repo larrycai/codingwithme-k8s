@@ -2,7 +2,7 @@
 
 some codes in CodingWithMe : Kubernetes
 
-* slides online: https://larrycai.gitlab.io/codingwithme-k8s
+* slides online: https://larrycai.github.io/codingwithme-k8s
 * slides@slideshare: https://www.slideshare.net/larrycai/learn-kubernetes-in-90-minutes (it cannot be updated since 2017.10 due to silly slideshare)
 
 # preparation in playground
